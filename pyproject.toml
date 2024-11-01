@@ -1,0 +1,16 @@
+[project]
+name = "goleki"
+version = "0.1.0"
+description = "A powerful, Perplexity-like search engine built with FastAPI and Groq's LLM API. Get real-time, AI-powered search results with source attribution."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "beautifulsoup4>=4.12.3",
+    "fastapi>=0.115.4",
+    "groq>=0.11.0",
+    "httpx>=0.27.2",
+    "pydantic>=2.9.2",
+    "python-dotenv>=1.0.1",
+    "requests>=2.32.3",
+    "uvicorn>=0.32.0",
+]
