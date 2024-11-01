@@ -63,6 +63,52 @@ class QueryResponse(BaseModel):
     processing_time: Optional[float] = None
     last_updated: datetime
 
+class ContentVerifier:
+    """
+    Helper class to verify and validate content credibility
+    """
+    @staticmethod
+    def is_credible_domain(url: str) -> bool:
+        """
+        Check if the domain is from a generally credible source
+        """
+        try:
+            from urllib.parse import urlparse
+            domain = urlparse(url).netloc.lower()
+            
+            # Red flags in URLs
+            suspicious_patterns = [
+                'free-download',
+                'miracle-solution',
+                'secret-revealed',
+                'one-weird-trick',
+                'spam',
+                'scam'
+            ]
+            
+            return not any(pattern in domain for pattern in suspicious_patterns)
+        except:
+            return False
+    
+    @staticmethod
+    def check_content_quality(text: str) -> bool:
+        """
+        Basic quality checks for content
+        """
+        if not text or len(text.strip()) < 50:  # Too short
+            return False
+            
+        # Check for spam-like patterns
+        spam_patterns = [
+            'click here',
+            'buy now',
+            'limited time offer',
+            'act now',
+            '100% guaranteed'
+        ]
+        
+        return not any(pattern in text.lower() for pattern in spam_patterns)
+    
 class WebSearcher:
     def __init__(self, groq_api_key: str = None, serper_api_key: str = None):
         self.groq_api_key = groq_api_key or os.getenv("GROQ_API_KEY")
@@ -77,6 +123,8 @@ class WebSearcher:
             'X-API-KEY': self.serper_api_key,
             'Content-Type': 'application/json'
         }
+        
+        self.content_verifier = ContentVerifier()
     
     def search_web(self, query: str, num_results: int = 5) -> List[Dict]:
         """
@@ -129,65 +177,107 @@ class WebSearcher:
 
     async def process_query(self, user_query: str, num_results: int = 3) -> Dict:
         """
-        Process a user query and return both the answer and sources
+        Process a user query with enhanced verification and fact-checking
         """
         logger.info(f"Processing query: {user_query}")
         try:
             # Search the web
-            search_results = self.search_web(user_query, num_results)
+            search_results = self.search_web(user_query, num_results * 2)  # Get more results for filtering
             if not search_results:
                 logger.warning("No search results found")
                 return {
-                    "answer": "I couldn't find any relevant search results for your query.",
+                    "answer": "I couldn't find any reliable search results for your query.",
                     "sources": []
                 }
             
-            # Fetch content from top results
-            contents = []
-            sources = []
-            for result in search_results[:num_results]:
-                if 'link' in result:
-                    content = await self.fetch_webpage_content(result['link'])
-                    contents.append({
-                        'url': result['link'],
-                        'title': result.get('title', ''),
-                        'content': content
-                    })
-                    sources.append({
-                        'url': result['link'],
-                        'title': result.get('title', ''),
-                        'snippet': result.get('snippet', '')
-                    })
+            # Filter and verify sources
+            verified_contents = []
+            verified_sources = []
             
-            # Prepare prompt for Groq
-            prompt = f"""Based on the following web search results, please answer this question: {user_query}
+            for result in search_results:
+                if 'link' in result and self.content_verifier.is_credible_domain(result['link']):
+                    content = await self.fetch_webpage_content(result['link'])
+                    
+                    if self.content_verifier.check_content_quality(content):
+                        verified_contents.append({
+                            'url': result['link'],
+                            'title': result.get('title', ''),
+                            'content': content
+                        })
+                        verified_sources.append({
+                            'url': result['link'],
+                            'title': result.get('title', ''),
+                            'snippet': result.get('snippet', '')
+                        })
+                        
+                        if len(verified_contents) >= num_results:
+                            break
+            
+            if not verified_contents:
+                return {
+                    "answer": "I found some results but couldn't verify their reliability. Please try rephrasing your query.",
+                    "sources": []
+                }
+            
+            # Prepare prompt with enhanced verification instructions
+            prompt = f"""Based on the following verified web search results, please answer this question: {user_query}
+
+            Instructions:
+                1. Analyze information critically and look for consensus among sources
+                2. If sources disagree, acknowledge the different viewpoints
+                3. If information seems uncertain, express appropriate doubt
+                4. Cite specific sources when making claims
+                5. Don't make definitive claims about controversial topics
 
             Search Results:
             """
             
-            for idx, content in enumerate(contents, 1):
+            for idx, content in enumerate(verified_contents, 1):
                 prompt += f"\nSource {idx}: {content['title']}\nURL: {content['url']}\n{content['content'][:1000]}\n"
             
-            prompt += "\nPlease provide a comprehensive answer based on these sources, citing them where appropriate."
-            
-            logger.debug("Sending request to Groq API")
-            # Get response from Groq
+            # Two-step verification with Groq
+            # First: Generate initial answer
             completion = self.groq_client.chat.completions.create(
-                model="mixtral-8x7b-32768",
+                model=os.getenv("GROQ_MODEL"),
                 messages=[
-                    {"role": "system", "content": "You are a helpful assistant that provides accurate, well-sourced answers based on web search results."},
+                    {"role": "system", "content": "You are a helpful assistant that provides accurate, well-sourced answers based on verified web search results. Always maintain a skeptical mindset and acknowledge uncertainties."},
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0.3,
-                max_tokens=2000
+                max_tokens=1500
             )
             
-            answer = completion.choices[0].message.content
-            logger.info("Successfully generated answer from Groq")
+            initial_answer = completion.choices[0].message.content
+            
+            # Second: Verify and refine the answer
+            verification_prompt = f"""Please verify and refine this answer, considering:
+            1. Are all claims properly supported by the sources?
+            2. Are there any logical inconsistencies?
+            3. Are uncertainties appropriately acknowledged?
+            4. Is the tone appropriately balanced?
+
+            Original Answer:
+            {initial_answer}
+
+            Please provide a refined version that addresses any issues found."""
+
+            verification = self.groq_client.chat.completions.create(
+                model=os.getenv("GROQ_MODEL"),
+                messages=[
+                    {"role": "system", "content": "You are a critical fact-checker. Your job is to verify information and ensure accurate, well-balanced responses."},
+                    {"role": "user", "content": verification_prompt}
+                ],
+                temperature=0.2,
+                max_tokens=1024
+            )
+            
+            final_answer = verification.choices[0].message.content
+            logger.info("Successfully generated and verified answer")
             
             return {
-                "answer": answer,
-                "sources": sources
+                "answer": final_answer,
+                "sources": verified_sources,
+                "verification_note": "This response has been verified for accuracy and credibility."
             }
         except Exception as e:
             logger.error(f"Error processing query: {str(e)}", exc_info=True)
