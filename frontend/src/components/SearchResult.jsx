@@ -80,8 +80,11 @@ function SearchResult({ query, result, isSearching }) {
         <SourcesSkeleton />
       ) : (
         <div className="text-[#ececec]">
-          <Sparkles className="w-5 h-5 text-[#686b6e]" /> <span>{formatAnswer(result?.answer)}</span>
-          <br /><small className="italic text-gray-500">ready in {result?.processing_time.toFixed(2)} secs.</small>
+          <div className="flex flex-row gap-3">
+            <Sparkles className="w-5 h-5 text-[#686b6e]" /><small className="italic text-gray-500">ready in {result?.processing_time.toFixed(2)} secs.</small>
+          </div>
+          <br />
+          <span>{formatAnswer(result?.answer)}</span>
         </div>
       )}
 
