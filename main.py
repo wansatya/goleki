@@ -50,7 +50,7 @@ query_store = {}
 
 class QueryRequest(BaseModel):
     query: str = Field(..., description="The search query to process")
-    num_results: Optional[int] = Field(default=3, description="Number of search results to process")
+    num_results: Optional[int] = Field(default=5, description="Number of search results to process")
 
 class QueryResponse(BaseModel):
     query_id: str
