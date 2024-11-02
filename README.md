@@ -77,6 +77,7 @@ cp .env.example .env
 Required environment variables:
 ```env
 GROQ_API_KEY=your-groq-api-key-here
+GROQ_MODEL=model-name-here
 SERPER_API_KEY=your-serper-api-key-here
 ```
 
@@ -219,9 +220,9 @@ Goleki needs donations from sponsors for the compute needed to run our unit & in
 If you love Goleki, consider sponsoring the project via [GitHub Sponsors](https://github.com/sponsors/wansatya), [Ko-fi](https://ko-fi.com/wawanbsetyawan) or reach out directly to wawanb.setyawan@gmail.com.
 
 💎 Diamond Sponsors     - [Contact directly](mailto:wawanb.setyawan@gmail.com)<br/>
-🥇 Gold Sponsors        - $5,000/mo<br/>
-🥈 Silver Sponsors      - $1,000/mo<br/>
-🥉 Bronze Sponsors      - $500/mo
+🥇 2 Seat: Gold Sponsors        - $5,000/mo<br/>
+🥈 6 Seat: Silver Sponsors      - $1,000/mo<br/>
+🥉 8 Seat: Bronze Sponsors      - $500/mo
 
 ---
 
