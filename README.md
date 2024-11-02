@@ -210,6 +210,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Star the repo if you find it useful
 - Follow for updates and more projects
 
+## ❤ Sponsors 
+
+[WanSatya Foundation](https://wansatya.org) is run by volunteer contributors who help us accelerate forward by fixing bugs, answering community questions and implementing new features. 
+
+Goleki needs donations from sponsors for the compute needed to run our unit & integration tests, troubleshooting community issues, and providing bounties. 
+
+If you love Goleki, consider sponsoring the project via [GitHub Sponsors](https://github.com/sponsors/wansatya), [Ko-fi](https://ko-fi.com/wawanbsetyawan) or reach out directly to wawanb.setyawan@gmail.com.
+
+💎 Diamond Sponsors     - [Contact directly](mailto:wawanb.setyawan@gmail.com)<br/>
+🥇 Gold Sponsors        - $5,000/mo<br/>
+🥈 Silver Sponsors      - $1,000/mo<br/>
+🥉 Bronze Sponsors      - $500/mo
+
 ---
 
 Built with ❤️ and a commitment to accuracy.
