@@ -224,10 +224,7 @@ If you love Goleki, consider sponsoring the project via [GitHub Sponsors](https:
 🥈 6 Seat: Silver Sponsors      - $1,000/mo<br/>
 🥉 8 Seat: Bronze Sponsors      - $500/mo
 
-
-## WanSatya Sponsorship Program
-
-### Overview
+### WBS Token Overview
 We also offer our sponsors WBS tokens on the Solana Network as part of our sponsorship program. WBS is a utility token that operates on the Solana blockchain.
 
 ### Sponsorship Tiers
