@@ -238,6 +238,7 @@ We also offer our sponsors WBS tokens on the Solana Network as part of our spons
 - Token Name: [WBS](https://solscan.io/token/C1nGTcJnMH8W5NZ49V2BcekpwB7nzdG9qBRztvrfq9RN)
 - Network: Solana
 - Total Supply: 21,011,980 WBS
+- Seed Allocation: 3,151,797 WBS (15%)
 - Initial Price: 0.020 SOL
 - SOL Price: $163 USD*
 
