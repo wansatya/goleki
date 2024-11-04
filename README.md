@@ -248,6 +248,9 @@ We also offer our sponsors WBS tokens on the Solana Network as part of our spons
 - All prices are monthly subscriptions
 - Token distributions occur on a monthly basis
 - *) Prices may vary based on SOL market value
+
+<br/>
+
 ---
 
 Built with ❤️ and a commitment to accuracy.
