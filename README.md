@@ -224,6 +224,30 @@ If you love Goleki, consider sponsoring the project via [GitHub Sponsors](https:
 🥈 6 Seat: Silver Sponsors      - $1,000/mo<br/>
 🥉 8 Seat: Bronze Sponsors      - $500/mo
 
+
+## WanSatya Sponsorship Program
+
+### Overview
+We also offer our sponsors WBS tokens on the Solana Network as part of our sponsorship program. WBS is a utility token that operates on the Solana blockchain.
+
+### Sponsorship Tiers
+| Plan | Price USD | Price SOL | WBS Token |
+|------|-----|-----|-----|
+| 1 | 5,000 | 30.62 | 1,531 |
+| 2 | 1,000 | 6.12 | 306 |
+| 3 | 500 | 3.06 | 153 |
+
+### Token Information
+- Token Name: [WBS](https://solscan.io/token/C1nGTcJnMH8W5NZ49V2BcekpwB7nzdG9qBRztvrfq9RN)
+- Network: Solana
+- Total Supply: 21,011,980 WBS
+- Initial Price: 0.020 SOL
+- SOL Price: $163 USD*
+
+### Notes
+- All prices are monthly subscriptions
+- Token distributions occur on a monthly basis
+- *) Prices may vary based on SOL market value
 ---
 
 Built with ❤️ and a commitment to accuracy.
